@@ -1,0 +1,18 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.douban.com/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+pyinstaller = "*"
+python-docx = "*"
+pypiwin32 = "*"
+xlrd = "*"
+xlwt = "*"
+xlutils = "*"
+openpyxl = "*"
+
+[requires]
+python_version = "3.7"
