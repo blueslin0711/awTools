@@ -4,13 +4,15 @@ from ExcelUtils import Excel
 import shutil
 import re
 import time
+from LogUtils import Log
 
+
+log = Log("config/config.txt")
 tdr_data_list = []
 
 
 def test():
-    add_time = 10
-    print("开始处理！")
+    log.log_info("开始处理！")
     if not os.path.exists("excel"):
         os.mkdir("excel")
     if not os.path.exists("docx"):
@@ -23,15 +25,15 @@ def test():
             if not re.match(".*格式件.*", f):
                 continue
             try:
-                deal_data_2_excel(parent + "/" + f)
+             deal_data_2_excel(parent + "/" + f)
             except Exception:
-                print("文件：" + parent + "/" + f + "格式有误，读取失败，请人工读取！")
-                add_time += 500
+                # log.log_error(e)
+                log.log_error("文件：" + parent + "/" + f + "格式有误，读取失败，请人工读取！")
     excel = Excel()
     shutil.copyfile("temp/tdr_temp.xls", "excel/TDR.xls")
     excel.modify_excel("excel/TDR.xls", [(2, 1, tdr_data_list)], sheet_index=1)
-    print("处理完毕！")
-    time.sleep(add_time)
+    log.log_info("处理完毕！")
+    time.sleep(3)
 
 
 def deal_data_2_excel(file_path):
@@ -73,7 +75,7 @@ def deal_data_2_excel(file_path):
             hs_code.append(b_c)
         if re.match(r"Container No./Seal No./Marks & Numbers", b_c) is not None:
             b_16_other_1 = textbox_list[index + 1]
-        if re.match(r"Gross Weight \(Kgs\) Measurement \(CBM\)", b_c) is not None:
+        if re.match(r".* \(CBM\).*", b_c) is not None:
             b_16_other_2 = textbox_list[index + 1]
             if re.match(r".*CBM.*", b_16_other_2) is None:
                 b_16_other_2 = b_16_other_2 + textbox_list[index + 2]
